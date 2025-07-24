@@ -1,7 +1,7 @@
 <?php
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\TaskController;
-
+use App\Http\Middleware\SuperAdminCheck;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -10,7 +10,13 @@ Route::get('/', function () {
 })->name('home');
 
 // User routes
-Route::resource('/users', UserController::class);
+Route::get('/users', [UserController::class, 'index'])->name("users.index");
+Route::get('/users/create', [UserController::class, 'create'])->name("users.create")->middleware(SuperAdminCheck::class);
+Route::post('/users', [UserController::class, 'store'])->name("users.store")->middleware(SuperAdminCheck::class);
+Route::get('/users/{user}', [UserController::class, 'show'])->name("users.show");
+Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name("users.edit")->middleware(SuperAdminCheck::class);
+Route::patch('/users/{user}', [UserController::class, 'update'])->name("users.update")->middleware(SuperAdminCheck::class);
+Route::delete('/users/{user}', [UserController::class, 'destroy'])->name("users.destroy")->middleware(SuperAdminCheck::class);
 
 // Task routes
 Route::get('/tasks', [TaskController::class, 'index'])->name("users.tasks.index");
