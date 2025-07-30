@@ -50,8 +50,8 @@ return new class extends Migration
             
             $table->string('name')->nullable(false)->change();
             
-            $table->dropIndex(['users_role_index']);
-            $table->dropIndex(['users_first_name_last_name_index']);
+            $table->dropIndex(['role']);
+            $table->dropIndex(['first_name', 'last_name']);
         });
     }
 };
