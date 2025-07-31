@@ -10,17 +10,16 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
-use Inertia\Inertia;
-use Inertia\Response;
+use Illuminate\View\View;
 
 class RegisteredUserController extends Controller
 {
     /**
-     * Show the registration page.
+     * Display the registration view.
      */
-    public function create(): Response
+    public function create(): View
     {
-        return Inertia::render('auth/register');
+        return view('auth.register');
     }
 
     /**
@@ -28,24 +27,51 @@ class RegisteredUserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request): RedirectResponse
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-        ]);
+        public function store(Request $request): RedirectResponse
+        {
+            $request->validate([
+                // 'name' => ['required', 'string', 'max:255'],
+                'first_name' => ['nullable', 'string', 'max:255'],
+                'last_name' => ['nullable', 'string', 'max:255'],
+                'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+                // 'phone' => ['nullable', 'string', 'max:20'],
+                // 'date_of_birth' => ['nullable', 'date'],
+                // 'gender' => ['nullable', 'string', 'in:male,female,other'],
+                // 'address' => ['nullable', 'string', 'max:500'],
+                // 'avatar' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
+                'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+            // Xử lý upload avatar nếu có
+            $avatarPath = null;
+            if ($request->hasFile('avatar')) {
+                $avatarPath = $request->file('avatar')->store('avatars', 'public');
+            }
+
+            // $user = User::create([
+            //     // 'name' => $request->name,
+            //     'first_name' => $request->first_name,
+            //     'last_name' => $request->last_name,
+            //     'email' => $request->email,
+            //     // 'phone' => $request->phone,
+            //     // 'date_of_birth' => $request->date_of_birth,
+            //     // 'gender' => $request->gender,
+            //     // 'address' => $request->address,
+            //     // 'avatar' => $avatarPath,
+            //     'password' => Hash::make($request->password),
+            // ]);
+
+            $user = new User();
+            $user->first_name = $request->first_name;
+            $user->last_name = $request->last_name;
+            $user->email = $request->email;
+            $user->password = $request->password;
+            $user->save();
 
         event(new Registered($user));
 
         Auth::login($user);
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        return redirect(route('dashboard', absolute: false));
     }
 }
