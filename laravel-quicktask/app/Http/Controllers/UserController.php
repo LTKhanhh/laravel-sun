@@ -12,8 +12,8 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
-        return User::All();
+        $users = User::all();
+        return view('users.index', compact('users'));
     }
 
     /**
@@ -22,6 +22,7 @@ class UserController extends Controller
     public function create()
     {
         //
+        return view('users.create');
     }
 
     /**
@@ -38,6 +39,8 @@ class UserController extends Controller
     public function show(User $user)
     {
         //
+        $users = User::all();
+        return view('users.show', compact('user'));
     }
 
     /**
@@ -46,6 +49,11 @@ class UserController extends Controller
     public function edit(User $user)
     {
         //
+        $users = User::all();
+        // Lấy tất cả users để admin có thể chọn
+        $users = User::all();
+    
+        return view('users.edit', compact('user', 'users'));
     }
 
     /**

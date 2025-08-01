@@ -20,7 +20,7 @@ class CreateAdmin extends Seeder
         [
             'first_name' => 'le trong',
             'last_name' => 'khanh',
-            'password' => Hash::make('123456'),
+            'password' => '12345678',
         ]
     );
         
