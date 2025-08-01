@@ -5,6 +5,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\TestUI;
 use App\Http\Middleware\SuperAdminCheck;
 Route::get('/', function () {
     return view('welcome');
@@ -40,5 +41,6 @@ Route::middleware('auth')->group(function () {
 
 Route::get('/language/{language}', [LanguageController::class, 'changeLanguage'])->name('language.change');
 
+Route::get('/test', [TestUI::class, 'index'])->name('test');
 
 require __DIR__.'/auth.php';

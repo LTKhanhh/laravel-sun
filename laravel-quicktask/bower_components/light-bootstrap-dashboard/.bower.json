@@ -1,0 +1,14 @@
+{
+  "name": "light-bootstrap-dashboard",
+  "homepage": "https://github.com/LTKhanhh/light-bootstrap-dashboard",
+  "_release": "651e5de956",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "651e5de95677efcdb84fe76a3096250e8743beb8"
+  },
+  "_source": "git@github.com:LTKhanhh/light-bootstrap-dashboard.git",
+  "_target": "*",
+  "_originalSource": "git@github.com:LTKhanhh/light-bootstrap-dashboard.git",
+  "_direct": true
+}
