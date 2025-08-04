@@ -21,16 +21,24 @@
                                 @csrf
                                 
                                 <div class="row">
-                                    <div class="col-md-6">
+                                   <div class="col-md-6">
                                         <div class="form-group">
-                                            <label class="bmd-label-floating">Full Name *</label>
-                                            <input type="text" name="fullname" class="form-control" value="{{ old('fullname') }}" required>
-                                            @error('fullname')
+                                            <label class="bmd-label-floating">First Name *</label>
+                                            <input type="text" name="first_name" class="form-control" value="{{ old('first_name')}}" required>
+                                            @error('first_name')
                                                 <div class="text-danger small mt-1">{{ $message }}</div>
                                             @enderror
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="bmd-label-floating">Last Name *</label>
+                                            <input type="text" name="last_name" class="form-control" value="{{ old('last_name') }}" required>
+                                            @error('last_name')
+                                                <div class="text-danger small mt-1">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <!-- <div class="col-md-6">
                                         <div class="form-group">
                                             <label class="bmd-label-floating">Username *</label>
                                             <input type="text" name="username" class="form-control" value="{{ old('username') }}" required>
@@ -38,7 +46,7 @@
                                                 <div class="text-danger small mt-1">{{ $message }}</div>
                                             @enderror
                                         </div>
-                                    </div>
+                                    </div> -->
                                 </div>
 
                                 <div class="row">
@@ -84,7 +92,7 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label class="bmd-label-floating">Location</label>
-                                            <input type="text" name="live_at" class="form-control" value="{{ old('live_at') }}">
+                                            <input type="text" name="address" class="form-control" value="{{ old('address') }}">
                                             @error('live_at')
                                                 <div class="text-danger small mt-1">{{ $message }}</div>
                                             @enderror

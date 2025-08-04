@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\UpdateUserRequest;
 
 class UserController extends Controller
 {
@@ -12,8 +14,12 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::all();
-        return view('users.index', compact('users'));
+        // $users = User::all();
+        // return view('users.index', compact('users'));
+
+        return view('users.index', [
+            'users' => User::with('tasks')->get()
+        ]);
     }
 
     /**
@@ -28,9 +34,16 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreUserRequest $request)
     {
         //
+        $userData = $request->safe()->except(['roles']);
+        $user = User::create($userData);
+        if ($request->has('roles') && is_array($request->roles)) {
+            $user->roles()->sync($request->roles);
+        }
+        return redirect()->route('users.index')
+                        ->with('success', 'Người dùng đã được tạo thành công!');
     }
 
     /**
@@ -38,8 +51,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        //
-        $users = User::all();
+        // $users = User::all();
         return view('users.show', compact('user'));
     }
 
@@ -48,20 +60,26 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        //
         $users = User::all();
-        // Lấy tất cả users để admin có thể chọn
-        $users = User::all();
-    
-        return view('users.edit', compact('user', 'users'));
+        return view('users.edit', compact('user','users'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, User $user)
+    public function update(UpdateUserRequest $request, User $user)
     {
-        //
+        $userData = $request->except(['password_confirmation', 'roles', 'avatar']);
+
+        $user->update($userData);
+
+        // Update roles
+        if ($request->has('roles') && is_array($request->roles)) {
+            $user->roles()->sync($request->roles);
+        }
+
+        return redirect()->route('users.show', $user)
+                        ->with('success', 'Thông tin người dùng đã được cập nhật!');
     }
 
     /**
@@ -69,6 +87,20 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        //
+        try {
+            // Delete related tasks (or you might want to reassign them)
+            $user->tasks()->delete();
+            
+            // Detach roles
+            $user->roles()->detach();
+            
+            $user->delete();
+
+            return redirect()->route('users.index')
+                           ->with('success', 'Người dùng đã được xóa thành công!');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                           ->with('error', 'Có lỗi xảy ra khi xóa người dùng!');
+        }
     }
 }
