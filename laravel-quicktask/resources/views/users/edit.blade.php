@@ -25,7 +25,7 @@
                                         <select id="userSelect" class="form-control" onchange="changeUser(this.value)">
                                             @foreach($users as $u)
                                                 <option value="{{ $u->id }}" {{ $u->id == $user->id ? 'selected' : '' }}>
-                                                    {{ $u->fullname }} ({{ $u->username }})
+                                                    {{ $u->first_name }} {{ $u->last_name }}  ({{ $u->email }})
                                                 </option>
                                             @endforeach
                                         </select>
@@ -37,23 +37,22 @@
                             
                             <form action="{{ route('users.update', $user->id) }}" method="POST">
                                 @csrf
-                                @method('PUT')
+                                @method('PATCH')
                                 
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label class="bmd-label-floating">Full Name *</label>
-                                            <input type="text" name="fullname" class="form-control" value="{{ old('fullname', $user->fullname) }}" required>
-                                            @error('fullname')
+                                            <label class="bmd-label-floating">First Name *</label>
+                                            <input type="text" name="first_name" class="form-control" value="{{ old('first_name', $user->first_name) }}" required>
+                                            @error('first_name')
                                                 <div class="text-danger small mt-1">{{ $message }}</div>
                                             @enderror
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
                                         <div class="form-group">
-                                            <label class="bmd-label-floating">Username *</label>
-                                            <input type="text" name="username" class="form-control" value="{{ old('username', $user->username) }}" required>
-                                            @error('username')
+                                            <label class="bmd-label-floating">Last Name *</label>
+                                            <input type="text" name="last_name" class="form-control" value="{{ old('last_name', $user->last_name) }}" required>
+                                            @error('last_name')
                                                 <div class="text-danger small mt-1">{{ $message }}</div>
                                             @enderror
                                         </div>
@@ -85,8 +84,8 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label class="bmd-label-floating">Location</label>
-                                            <input type="text" name="live_at" class="form-control" value="{{ old('live_at', $user->live_at) }}">
-                                            @error('live_at')
+                                            <input type="text" name="address" class="form-control" value="{{ old('address', $user->address) }}">
+                                            @error('address')
                                                 <div class="text-danger small mt-1">{{ $message }}</div>
                                             @enderror
                                         </div>
@@ -101,6 +100,7 @@
                                                 <option value="">Select Role</option>
                                                 <option value="user" {{ old('role', $user->role) == 'user' ? 'selected' : '' }}>User</option>
                                                 <option value="admin" {{ old('role', $user->role) == 'admin' ? 'selected' : '' }}>Admin</option>
+                                                <option value="manager" {{ old('role', $user->role) == 'user' ? 'selected' : '' }}>Manager</option>
                                             </select>
                                             @error('role')
                                                 <div class="text-danger small mt-1">{{ $message }}</div>
@@ -111,7 +111,7 @@
 
                                 <!-- Change Password Section -->
                                 <hr class="my-4">
-                                <h5 class="text-muted">Change Password (Optional)</h5>
+                                <!-- <h5 class="text-muted">Change Password (Optional)</h5>
                                 
                                 <div class="row">
                                     <div class="col-md-6">
@@ -130,7 +130,7 @@
                                             <input type="password" name="password_confirmation" class="form-control">
                                         </div>
                                     </div>
-                                </div>
+                                </div> -->
 
                                 <div class="clearfix"></div>
                                 
